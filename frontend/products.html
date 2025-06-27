@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ShopSmart Products</title>
+  <link rel="stylesheet" href="styles/style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    h1 {
+      background-color: #4CAF50;
+      color: white;
+      padding: 20px;
+      margin: 0;
+    }
+    #product-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+      gap: 20px;
+    }
+    .product {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 15px;
+      width: 200px;
+      transition: transform 0.2s;
+    }
+    .product:hover {
+      transform: scale(1.05);
+    }
+    .product img {
+      width: 100%;
+      height: 150px;
+      object-fit: contain;
+      border-radius: 5px;
+    }
+    .product h3 {
+      margin: 10px 0 5px;
+    }
+    .product p {
+      margin: 0;
+      font-weight: bold;
+      color: #2e8b57;
+    }
+  </style>
+</head>
+<body>
+  <h1>🛒 Our Grocery Products</h1>
+  <div id="product-list">Loading products...</div>
+
+  <script>
+    fetch("http://localhost:3000/api/products")
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("product-list");
+        container.innerHTML = ""; // clear 'Loading...'
+        data.forEach(product => {
+          const card = `
+            <div class="product">
+              <img src="http://localhost:3000${product.image}" alt="${product.name}" />
+              <h3>${product.name}</h3>
+              <p>₹${product.price}</p>
+            </div>
+          `;
+          container.innerHTML += card;
+        });
+      })
+      .catch(err => {
+        console.error("Error loading products:", err);
+        document.getElementById("product-list").innerHTML =
+          "<p style='color:red;'>⚠️ Failed to load products. Make sure backend is running.</p>";
+      });
+  </script>
+</body>
+</html>
